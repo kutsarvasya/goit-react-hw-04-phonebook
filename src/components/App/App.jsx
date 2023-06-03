@@ -1,28 +1,15 @@
 import { Contacts } from 'components/Contacts/Contacts';
 import { Filter } from 'components/Filter/Filter';
 import { Form } from 'components/Form/Form';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Div } from './App.styled';
 import { initialPhoneBook } from 'components/data/data';
+import { useLocalStorage } from 'components/useLocalStorage/useLocalStorage';
 
 export function App() {
   const [contacts, setContacts] = useLocalStorage('contacts', initialPhoneBook);
   const [filter, setFilter] = useState('');
 
-  function useLocalStorage(key, defaultValue) {
-    const [state, setState] = useState(() => {
-      const contacts = JSON.parse(localStorage.getItem(key));
-      if (contacts) {
-        return contacts.length === 0 ? defaultValue : contacts;
-      } else {
-        return defaultValue;
-      }
-    });
-    useEffect(() => {
-      localStorage.setItem(key, JSON.stringify(state));
-    }, [key, state]);
-    return [state, setState];
-  }
   const deleteContacts = id => {
     setContacts(prev => prev.filter(contact => contact.id !== id));
   };

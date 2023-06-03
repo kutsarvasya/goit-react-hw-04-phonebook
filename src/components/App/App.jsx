@@ -3,30 +3,23 @@ import { Filter } from 'components/Filter/Filter';
 import { Form } from 'components/Form/Form';
 import { useEffect, useState } from 'react';
 import { Div } from './App.styled';
-
-const initialPhoneBook = [
-  { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-  { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-  { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-  { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-];
-
-const useLocalStorage = (key, defaultValue) => {
-  const [state, setState] = useState(() => {
-    const contacts = JSON.parse(localStorage.getItem(key));
-    return contacts.length === 0 ? defaultValue : contacts;
-  });
-
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(state));
-  }, [key, state]);
-  return [state, setState];
-};
+import { initialPhoneBook } from 'components/data/data';
 
 export function App() {
   const [contacts, setContacts] = useLocalStorage('contacts', initialPhoneBook);
   const [filter, setFilter] = useState('');
 
+  function useLocalStorage(key, defaultValue) {
+    const [state, setState] = useState(() => {
+      const contacts = JSON.parse(localStorage.getItem(key));
+      return contacts.length === 0 ? defaultValue : contacts;
+    });
+
+    useEffect(() => {
+      localStorage.setItem(key, JSON.stringify(state));
+    }, [key, state]);
+    return [state, setState];
+  }
   const deleteContacts = id => {
     setContacts(prev => prev.filter(contact => contact.id !== id));
   };
